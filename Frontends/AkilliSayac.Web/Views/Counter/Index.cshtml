@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+@model List<AkilliSayac.Web.Models.Counters.CounterViewModel>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Sayaçlar</h5>
+
+                <a asp-controller="Counter" asp-action="Create" class="btn btn-primary mb-3">Sayaç oluştur</a>
+                @if (Model.Any())
+                {
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Seri Numarası</th>
+                                <th>Ölçüm Zamanı</th>
+                                <th>Son Endeks Bilgisi</th>
+                                <th>Voltaj Değeri</th>
+                                <th>Akım Değeri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.SerialNumber</td>
+                                    <td>@item.MeasurementTime.ToShortDateString()</td>
+                                    <td>@item.LatestIndex</td>
+                                    <td>@item.VoltageValue</td>
+                                    <td>@item.CurrentValue</td>
+                                    <td>
+                                        <a asp-controller="Counter" asp-action="Update" asp-route-id="@item.Id" class="btn btn-success btn-sm">Güncelle</a>
+
+                                        <a asp-controller="Counter" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Sil</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        Sayaç bulunamadı.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

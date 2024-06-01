@@ -40,7 +40,15 @@ namespace AkilliSayac.Services.Counter.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CounterDto counterDto)
         {
+            
             counterDto.UserId = _sharedIdentityService.GetUserId;
+
+            counterDto.CreatedTime = DateTime.Now;
+            //if (counterDto.Id == null)
+            //{
+            //    var uudi = Guid.NewGuid();
+            //    counterDto.Id =uudi.ToString();
+            //}
             var response = await _counterService.CreateAsync(counterDto);
 
             return CreateActionResultInstance(response);
@@ -49,6 +57,8 @@ namespace AkilliSayac.Services.Counter.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(CounterDto counterDto)
         {
+            counterDto.UserId = _sharedIdentityService.GetUserId;
+            counterDto.UpdateTime = DateTime.Now;
             var response = await _counterService.UpdateAsync(counterDto);
 
             return CreateActionResultInstance(response);

@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Update";
+}
+@model AkilliSayac.Web.Models.Counters.CounterCreateInput
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Sayaç güncelleme </h5>
+
+                <form asp-controller="Counter" asp-action="Update" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
+            
+
+                    <div class="mb-3">
+                        <label asp-for="SerialNumber" class="form-label"></label>
+                        <input maxlength="8" asp-for="SerialNumber" class="form-control" />
+                        <span class="text-danger" asp-validation-for="SerialNumber"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="MeasurementTime" class="form-label"></label>
+                        <input type="datetime-local" asp-for="MeasurementTime" class="form-control" />
+                        <span class="text-danger" asp-validation-for="MeasurementTime"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="LatestIndex" class="form-label"></label>
+                        <input asp-for="LatestIndex" class="form-control"></input>
+                        <span class="text-danger" asp-validation-for="LatestIndex"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="VoltageValue" class="form-label"></label>
+                        <input asp-for="VoltageValue" class="form-control" />
+                        <span class="text-danger" asp-validation-for="VoltageValue"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CurrentValue" class="form-label"></label>
+                        <input asp-for="CurrentValue" class="form-control" />
+                        <span class="text-danger" asp-validation-for="CurrentValue"></span>
+                    </div>
+
+                  
+
+                    <button type="submit" class="btn btn-primary">Sayaç Güncelle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

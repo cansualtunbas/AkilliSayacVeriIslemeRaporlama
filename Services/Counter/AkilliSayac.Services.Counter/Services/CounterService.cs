@@ -41,7 +41,7 @@ namespace AkilliSayac.Services.Counter.Services
 
         public async Task<Response<NoContent>> DeleteAsync(string id)
         {
-            var result = await _counterCollection.DeleteOneAsync(x => x.Id == id);
+            var result = await _counterCollection.DeleteOneAsync(x => x.Id.ToString() == id);
 
             if (result.DeletedCount > 0)
             {
@@ -62,14 +62,15 @@ namespace AkilliSayac.Services.Counter.Services
             }
             else
             {
-                return Response<List<CounterDto>>.Fail("Counter not found", 404);
+                var list=new List<CounterDto>();
+                return Response<List<CounterDto>>.Success(list, 200);
             }
         }
 
 
         public async Task<Response<CounterDto>> GetByIdAsync(string id)
         {
-            var counter=await _counterCollection.Find<Models.Counter>(x=>x.Id == id).FirstOrDefaultAsync();
+            var counter=await _counterCollection.Find<Models.Counter>(x=>x.Id.ToString() == id).FirstOrDefaultAsync();
 
             if(counter == null)
             {
@@ -90,7 +91,7 @@ namespace AkilliSayac.Services.Counter.Services
                 return Response<NoContent>.Fail("Counter not found", 404);
             }
             //rabbitmq için
-            await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id, UpdatedSerialNumber = counter.SerialNumber, UpdatedLatestIndex = counter.LatestIndex, UpdatedVoltageValue = counter.VoltageValue, UpdatedCurrentValue = counter.CurrentValue });
+            await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id.ToString(), UpdatedSerialNumber = counter.SerialNumber, UpdatedLatestIndex = counter.LatestIndex, UpdatedVoltageValue = counter.VoltageValue, UpdatedCurrentValue = counter.CurrentValue });
 
             return Response<NoContent>.Success(204);
         }

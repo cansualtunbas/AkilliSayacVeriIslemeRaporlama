@@ -19,7 +19,7 @@ namespace AkilliSayac.Services.Report.Consumers
         }
         public async Task Consume(ConsumeContext<CounterChangedEvent> context)
         {
-            var reports = await _reportCollection.Find<Models.Report>(x => x.Counter.Id == context.Message.CounterId).ToListAsync();
+            var reports = await _reportCollection.Find<Models.Report>(x => x.Counter.Id.ToString() == context.Message.CounterId).ToListAsync();
             foreach (var item in reports)
             {
                 var result = await _reportCollection.FindOneAndReplaceAsync(x => x.Id == item.Id, new Models.Report { Counter = new Models.Counter { CurrentValue = context.Message.UpdatedCurrentValue, SerialNumber=context.Message.UpdatedSerialNumber ,LatestIndex=context.Message.UpdatedLatestIndex ,VoltageValue=context.Message.UpdatedVoltageValue } });
