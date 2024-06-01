@@ -2,9 +2,11 @@
 using AkilliSayac.Services.Report.Models;
 using AkilliSayac.Services.Report.Settings;
 using AkilliSayac.Shared.Dtos;
+using AkilliSayac.Shared.Messages;
 using AutoMapper;
 using MongoDB.Driver;
 using static MassTransit.Logging.OperationName;
+using Mass = MassTransit;
 
 namespace AkilliSayac.Services.Report.Services
 {
@@ -13,7 +15,8 @@ namespace AkilliSayac.Services.Report.Services
         private readonly IMongoCollection<Models.Counter> _counterCollection;
         private readonly IMongoCollection<Models.Report> _reportCollection;
         private readonly IMapper _mapper;
-        public ReportService(IMapper mapper, IDatabaseSettings databaseSettings)
+        private readonly Mass.IPublishEndpoint _publishEndpoint;
+        public ReportService(IMapper mapper, IDatabaseSettings databaseSettings, Mass.IPublishEndpoint publishEndpoint)
         {
             var client = new MongoClient(databaseSettings.ConnectionString);
 
@@ -23,6 +26,7 @@ namespace AkilliSayac.Services.Report.Services
             _reportCollection = database.GetCollection<Models.Report>(databaseSettings.ReportCollectionName);
 
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Response<ReportDto>> CreateAsync(ReportDto reportDto)
@@ -32,7 +36,7 @@ namespace AkilliSayac.Services.Report.Services
             newReport.CreatedTime = DateTime.Now;
             await _reportCollection.InsertOneAsync(newReport);
             //rabbitmq için
-            //await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id,UpdatedSerialNumber=counter.SerialNumber, UpdatedLatestIndex=counter.LatestIndex, UpdatedVoltageValue=counter.VoltageValue, UpdatedCurrentValue=counter.CurrentValue });
+            await _publishEndpoint.Publish<ReportChangedEvent>(new ReportChangedEvent { Status=1 });
             return Response<ReportDto>.Success(_mapper.Map<ReportDto>(newReport), 200);
         }
 

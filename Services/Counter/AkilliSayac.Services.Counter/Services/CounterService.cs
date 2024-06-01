@@ -13,10 +13,10 @@ namespace AkilliSayac.Services.Counter.Services
     {
         private readonly IMongoCollection<Models.Counter> _counterCollection;
         private readonly IMapper _mapper;
-        //private readonly Mass.IPublishEndpoint _publishEndpoint;
+        private readonly Mass.IPublishEndpoint _publishEndpoint;
 
 
-        public CounterService(IMapper mapper, IDatabaseSettings databaseSettings)
+        public CounterService(IMapper mapper, IDatabaseSettings databaseSettings, Mass.IPublishEndpoint publishEndpoint)
         {
             var client = new MongoClient(databaseSettings.ConnectionString);
 
@@ -26,7 +26,7 @@ namespace AkilliSayac.Services.Counter.Services
 
             _mapper = mapper;
 
-            //_publishEndpoint = publishEndpoint;
+            _publishEndpoint = publishEndpoint;
         }
         public async Task<Response<CounterDto>> CreateAsync(CounterDto counter)
         {
@@ -90,7 +90,7 @@ namespace AkilliSayac.Services.Counter.Services
                 return Response<NoContent>.Fail("Counter not found", 404);
             }
             //rabbitmq için
-            //await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id,UpdatedSerialNumber=counter.SerialNumber, UpdatedLatestIndex=counter.LatestIndex, UpdatedVoltageValue=counter.VoltageValue, UpdatedCurrentValue=counter.CurrentValue });
+            await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id, UpdatedSerialNumber = counter.SerialNumber, UpdatedLatestIndex = counter.LatestIndex, UpdatedVoltageValue = counter.VoltageValue, UpdatedCurrentValue = counter.CurrentValue });
 
             return Response<NoContent>.Success(204);
         }

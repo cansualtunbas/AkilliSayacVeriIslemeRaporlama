@@ -7,22 +7,22 @@ namespace AkilliSayac.Services.Report.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; }
+        public string? Id { get; set; }
         
-        public string? SerialNumber { get; }
+        public string? SerialNumber { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime MeasurementTime { get; }
+        public DateTime MeasurementTime { get; set; }
 
-        public string? LatestIndex { get;}
-        public string? VoltageValue { get; }
-        public string? CurrentValue { get; }
+        public string? LatestIndex { get; set; }
+        public string? VoltageValue { get; set; }
+        public string? CurrentValue { get; set; }
 
-        public string? UserId { get; }
+        public string? UserId { get; set; }
 
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime? CreatedTime { get; }
+        public DateTime? CreatedTime { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime? UpdateTime { get; }
+        public DateTime? UpdateTime { get; set; }
 
 
     }

@@ -36,15 +36,15 @@ public static class Config
     public static IEnumerable<Client> Clients =>
         new Client[]
         {
-                //ClientCredentials refresh token yok 
-                new Client
-                {
-                   ClientName="Asp.Net Core MVC",
-                    ClientId="WebMvcClient",
-                    ClientSecrets= {new Secret("secret".Sha256())},
-                    AllowedGrantTypes= GrantTypes.ClientCredentials,
-                    AllowedScopes={ "report_fullpermission", "counter_fullpermission", "gateway_fullpermission", IdentityServerConstants.LocalApi.ScopeName }
-                },
+                ////ClientCredentials refresh token yok 
+                //new Client
+                //{
+                //   ClientName="Asp.Net Core MVC",
+                //    ClientId="WebMvcClient",
+                //    ClientSecrets= {new Secret("secret".Sha256())},
+                //    AllowedGrantTypes= GrantTypes.ClientCredentials,
+                //    AllowedScopes={ "report_fullpermission", "counter_fullpermission", "gateway_fullpermission", IdentityServerConstants.LocalApi.ScopeName }
+                //},
                 //token alması gerekiyor.resource owner
                    new Client
                 {
