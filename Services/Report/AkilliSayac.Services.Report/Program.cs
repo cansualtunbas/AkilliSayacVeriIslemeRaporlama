@@ -1,8 +1,10 @@
 
 using AkilliSayac.Services.Report.Consumers;
+using AkilliSayac.Services.Report.Dtos;
 using AkilliSayac.Services.Report.Services;
 using AkilliSayac.Services.Report.Settings;
 using AkilliSayac.Shared.Classes;
+using AkilliSayac.Shared.Enums;
 using AkilliSayac.Shared.Services;
 using MassTransit;
 using MassTransit.Transports;
@@ -66,7 +68,20 @@ builder.Services.AddSingleton<IDatabaseSettings>(sp =>
 
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
 
+    var counterService = serviceProvider.GetRequiredService<IReportService>();
+
+    if (!(await counterService.GetAllAsync()).Data.Any())
+    {
+        await counterService.CreateAsync(new ReportDto { Id= Guid.NewGuid().ToString(), RequestedDate=DateTime.Now, ReportStatus=0,CounterSerialNumber= "12345678", Counter = { }, CreatedTime=DateTime.Now });
+        await counterService.CreateAsync(new ReportDto {Id= Guid.NewGuid().ToString(), RequestedDate = DateTime.Now, ReportStatus = 0,CounterSerialNumber= "31345678", Counter = {},CreatedTime = DateTime.Now });
+
+  
+    }
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

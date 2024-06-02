@@ -18,10 +18,7 @@
                         <thead>
                             <tr>
                                 <th>Seri Numarası</th>
-                                <th>Ölçüm Zamanı</th>
-                                <th>Son Endeks Bilgisi</th>
-                                <th>Voltaj Değeri</th>
-                                <th>Akım Değeri</th>
+                             
                                 <th>Rapor Durumu</th>
                             </tr>
                         </thead>
@@ -30,12 +27,8 @@
                             {
                                 <tr>
 
-                                    <td>@item.Counter.SerialNumber</td>
-                                    <td>@item.Counter.MeasurementTime.ToShortDateString()</td>
-                                    <td>@item.Counter.LatestIndex</td>
-                                    <td>@item.Counter.VoltageValue</td>
-                                    <td>@item.Counter.CurrentValue</td>
-
+                                    <td>@item.CounterSerialNumber</td>
+                                    
                                     <td>@item.ReportStatus</td>
 
 

@@ -19,11 +19,12 @@ namespace AkilliSayac.Services.Report.Consumers
         {
 
             var result = await _reportService.GetByIdAsync(context.Message.ReportId);
-            result.Data.ReportStatus = Shared.Enums.ReportStatus.Completed;
+            result.Data.ReportStatus = Shared.Enums.ReportStatus.Tamamlandı;
             var reportDto = new ReportDto
             {
                 RequestedDate=result.Data.RequestedDate,
-                CounterId=result.Data.CounterId,
+                CounterSerialNumber=result.Data.CounterSerialNumber,
+                //CounterId=result.Data.CounterId,
                 Counter=result.Data.Counter,
                 CreatedTime=result.Data.CreatedTime,
                 Id = result.Data.Id,

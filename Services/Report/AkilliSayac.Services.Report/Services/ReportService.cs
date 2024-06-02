@@ -44,18 +44,11 @@ namespace AkilliSayac.Services.Report.Services
         public async Task<Response<List<ReportDto>>> GetAllAsync()
         {
             var reports = await _reportCollection.Find(x => true).ToListAsync();
-            if (reports.Any())
+            if (!reports.Any())
             {
-                foreach (var report in reports)
-                {
-                    report.Counter = await _counterCollection.Find<Models.Counter>(x => x.Id.ToString() == report.CounterId).FirstAsync();
-                   
-                }
+                reports = new List<Models.Report>();
             }
-            else
-            {
-              reports=new List<Models.Report>();
-            }
+        
            
             return Response<List<ReportDto>>.Success(_mapper.Map<List<ReportDto>>(reports), 200);
         }
@@ -68,7 +61,7 @@ namespace AkilliSayac.Services.Report.Services
             {
                 return Response<ReportDto>.Fail("Report not found", 404);
             }
-            report.Counter = await _counterCollection.Find<Models.Counter>(x => x.Id.ToString() == report.CounterId).FirstAsync();
+            report.Counter = await _counterCollection.Find<Models.Counter>(x => x.SerialNumber == report.CounterSerialNumber).FirstAsync();
 
             return Response<ReportDto>.Success(_mapper.Map<ReportDto>(report), 200);
         }
@@ -82,7 +75,7 @@ namespace AkilliSayac.Services.Report.Services
             {
                 return Response<ReportDto>.Fail("Report not found", 404);
             }
-            report.Counter = await _counterCollection.Find<Models.Counter>(x => x.Id.ToString() == report.CounterId).FirstAsync();
+            report.Counter = await _counterCollection.Find<Models.Counter>(x => x.SerialNumber == report.CounterSerialNumber).FirstAsync();
 
             return Response<ReportDto>.Success(_mapper.Map<ReportDto>(report), 200);
         }

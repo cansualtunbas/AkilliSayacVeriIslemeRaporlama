@@ -10,7 +10,7 @@ namespace AkilliSayac.Web.Models.Reports
         public DateTime RequestedDate { get; set; }
         public ReportStatus ReportStatus { get; set; }
         public DateTime CreatedTime { get; set; }
-        public string CounterId { get; set; }
+        public string CounterSerialNumber { get; set; }
    
         public CounterCreateInput Counter { get; set; }
     }

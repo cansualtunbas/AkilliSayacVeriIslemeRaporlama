@@ -6,7 +6,7 @@ namespace AkilliSayac.Shared.Enums
 {
     public enum ReportStatus
     {
-        GettingReady = 0,
-        Completed = 1
+        Hazırlanıyor = 0,
+        Tamamlandı = 1
     }
 }

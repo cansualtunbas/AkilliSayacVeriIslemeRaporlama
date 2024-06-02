@@ -13,7 +13,8 @@ namespace AkilliSayac.Services.Report.Models
         public ReportStatus ReportStatus { get; set; }
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime CreatedTime { get; set; }
-        public string CounterId { get; set; }
+        //public string CounterId { get; set; }
+        public string CounterSerialNumber { get; set; }
         [BsonIgnore]
         public Counter Counter { get; set; }
     }

@@ -23,7 +23,7 @@ namespace AkilliSayac.Services.Report.Controllers
         public async Task<IActionResult> GetAll()
         {
             var response = await _reportService.GetAllAsync();
-
+            
             return CreateActionResultInstance(response);
         }
 

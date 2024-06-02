@@ -3,6 +3,8 @@ using AkilliSayac.Web.Models;
 using AkilliSayac.Web.Models.Counters;
 using AkilliSayac.Web.Models.Reports;
 using AkilliSayac.Web.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net.Http.Json;
 
 namespace AkilliSayac.Web.Services
@@ -49,5 +51,7 @@ namespace AkilliSayac.Web.Services
 
             return response.IsSuccessStatusCode;
         }
+
+
     }
 }
