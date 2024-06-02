@@ -1,8 +1,11 @@
 
+using AkilliSayac.Services.Report.Consumers;
 using AkilliSayac.Services.Report.Services;
 using AkilliSayac.Services.Report.Settings;
+using AkilliSayac.Shared.Classes;
 using AkilliSayac.Shared.Services;
 using MassTransit;
+using MassTransit.Transports;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -23,15 +26,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(x =>
 {
-    // Default Port : 5672
+    x.AddConsumer<ReportStatusChangedEventConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
+        //dockerize edilseydi burdaki adres dockerize adresi olacakti
         cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
         {
             host.Username("guest");
             host.Password("guest");
         });
+        cfg.ReceiveEndpoint(RabbitMQSettingsConst.ReportChangedEventQueueName, e =>
+        {
+            e.ConfigureConsumer<ReportStatusChangedEventConsumer>(context);
+        });
     });
+
 });
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
@@ -45,7 +54,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 builder.Services.AddScoped<IReportService, ReportService>();
-
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 

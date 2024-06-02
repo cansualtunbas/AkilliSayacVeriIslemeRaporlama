@@ -1,6 +1,7 @@
 ﻿using AkilliSayac.Services.Report.Models;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using AkilliSayac.Shared.Enums;
 
 namespace AkilliSayac.Services.Report.Dtos
 {
@@ -9,7 +10,7 @@ namespace AkilliSayac.Services.Report.Dtos
       
         public string Id { get; set; }
         public DateTime RequestedDate { get; set; }
-        public Status ReportStatus { get; set; }
+        public ReportStatus ReportStatus { get; set; }
         public string CounterId { get; set; }
      
         public Counter Counter { get; set; }

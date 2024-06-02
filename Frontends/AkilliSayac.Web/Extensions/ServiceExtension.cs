@@ -22,10 +22,10 @@ namespace AkilliSayac.Web.Extensions
                 opt.BaseAddress = new Uri($"{serviceApiSettings.GatewayBaseUri}/{serviceApiSettings.Counter.Path}");
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
-            //services.AddHttpClient<IDiscountService, DiscountService>(opt =>
-            //{
-            //    opt.BaseAddress = new Uri($"{serviceApiSettings.GatewayBaseUri}/{serviceApiSettings.Discount.Path}");
-            //}).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+            services.AddHttpClient<IReportService, ReportService>(opt =>
+            {
+                opt.BaseAddress = new Uri($"{serviceApiSettings.GatewayBaseUri}/{serviceApiSettings.Report.Path}");
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
 
 

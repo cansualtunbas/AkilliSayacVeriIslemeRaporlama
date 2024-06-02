@@ -11,6 +11,7 @@ namespace AkilliSayac.Services.Report.Services
         Task<Response<ReportDto>> GetBySerialNumberAsync(string serialNumber);
 
         Task<Response<ReportDto>> CreateAsync(ReportDto reportDto);
+        Task<Response<NoContent>> UpdateAsync(ReportDto reportDto);
 
 
     }

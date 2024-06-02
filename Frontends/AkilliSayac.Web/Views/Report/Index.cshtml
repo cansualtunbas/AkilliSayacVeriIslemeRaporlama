@@ -1,0 +1,67 @@
+﻿@using AkilliSayac.Shared.Enums
+@{
+    ViewData["Title"] = "Index";
+}
+@model List<AkilliSayac.Web.Models.Reports.ReportViewModel>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Raporlar</h5>
+
+                @* <a asp-controller="Report" asp-action="Create" class="btn btn-primary mb-3">Sayaç oluştur</a> *@
+                @if (Model.Any())
+                {
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Seri Numarası</th>
+                                <th>Ölçüm Zamanı</th>
+                                <th>Son Endeks Bilgisi</th>
+                                <th>Voltaj Değeri</th>
+                                <th>Akım Değeri</th>
+                                <th>Rapor Durumu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.Counter.SerialNumber</td>
+                                    <td>@item.Counter.MeasurementTime.ToShortDateString()</td>
+                                    <td>@item.Counter.LatestIndex</td>
+                                    <td>@item.Counter.VoltageValue</td>
+                                    <td>@item.Counter.CurrentValue</td>
+
+                                    <td>@item.ReportStatus</td>
+
+
+                                    <td>
+
+                                        @using (Html.BeginForm("CreateReport", "Report"))
+                                        {
+                                            <input type="hidden" name="Id" value="@item.Id" />
+                                            <input class = "btn btn-info"  type="submit" value="Rapor Oluştur" />
+                                        }
+                                    </td>
+
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        Rapor bulunamadı.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -12,21 +12,23 @@ namespace AkilliSayac.Services.Counter.Services
     public class CounterService : ICounterService
     {
         private readonly IMongoCollection<Models.Counter> _counterCollection;
+        private readonly IMongoCollection<Models.Report> _reportCollection;
         private readonly IMapper _mapper;
-        private readonly Mass.IPublishEndpoint _publishEndpoint;
+        //private readonly Mass.IPublishEndpoint _publishEndpoint;
 
 
-        public CounterService(IMapper mapper, IDatabaseSettings databaseSettings, Mass.IPublishEndpoint publishEndpoint)
+        public CounterService(IMapper mapper, IDatabaseSettings databaseSettings)
         {
             var client = new MongoClient(databaseSettings.ConnectionString);
 
             var database = client.GetDatabase(databaseSettings.DatabaseName);
 
             _counterCollection = database.GetCollection<Models.Counter>(databaseSettings.CounterCollectionName);
+            _reportCollection = database.GetCollection<Models.Report>(databaseSettings.ReportCollectionName);
 
             _mapper = mapper;
 
-            _publishEndpoint = publishEndpoint;
+            //_publishEndpoint = publishEndpoint;
         }
         public async Task<Response<CounterDto>> CreateAsync(CounterDto counter)
         {
@@ -41,8 +43,14 @@ namespace AkilliSayac.Services.Counter.Services
 
         public async Task<Response<NoContent>> DeleteAsync(string id)
         {
+            var a = await _reportCollection.Find(x => x.CounterId == id).FirstOrDefaultAsync();
+            if (a != null)
+            {
+                var resultReport = await _reportCollection.DeleteManyAsync(x => x.CounterId.ToString() ==id);
+            }
+          
             var result = await _counterCollection.DeleteOneAsync(x => x.Id.ToString() == id);
-
+          
             if (result.DeletedCount > 0)
             {
                 return Response<NoContent>.Success(204);
@@ -91,7 +99,7 @@ namespace AkilliSayac.Services.Counter.Services
                 return Response<NoContent>.Fail("Counter not found", 404);
             }
             //rabbitmq için
-            await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id.ToString(), UpdatedSerialNumber = counter.SerialNumber, UpdatedLatestIndex = counter.LatestIndex, UpdatedVoltageValue = counter.VoltageValue, UpdatedCurrentValue = counter.CurrentValue });
+            //await _publishEndpoint.Publish<CounterChangedEvent>(new CounterChangedEvent { CounterId = counter.Id.ToString(), UpdatedSerialNumber = counter.SerialNumber, UpdatedLatestIndex = counter.LatestIndex, UpdatedVoltageValue = counter.VoltageValue, UpdatedCurrentValue = counter.CurrentValue });
 
             return Response<NoContent>.Success(204);
         }

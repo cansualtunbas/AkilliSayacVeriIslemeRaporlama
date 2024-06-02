@@ -2,6 +2,7 @@
 using AkilliSayac.Services.Report.Models;
 using AkilliSayac.Services.Report.Settings;
 using AkilliSayac.Shared.Dtos;
+using AkilliSayac.Shared.Enums;
 using AkilliSayac.Shared.Messages;
 using AutoMapper;
 using MongoDB.Driver;
@@ -15,8 +16,8 @@ namespace AkilliSayac.Services.Report.Services
         private readonly IMongoCollection<Models.Counter> _counterCollection;
         private readonly IMongoCollection<Models.Report> _reportCollection;
         private readonly IMapper _mapper;
-        private readonly Mass.IPublishEndpoint _publishEndpoint;
-        public ReportService(IMapper mapper, IDatabaseSettings databaseSettings, Mass.IPublishEndpoint publishEndpoint)
+        //private readonly Mass.IPublishEndpoint _publishEndpoint;
+        public ReportService(IMapper mapper, IDatabaseSettings databaseSettings)
         {
             var client = new MongoClient(databaseSettings.ConnectionString);
 
@@ -26,7 +27,7 @@ namespace AkilliSayac.Services.Report.Services
             _reportCollection = database.GetCollection<Models.Report>(databaseSettings.ReportCollectionName);
 
             _mapper = mapper;
-            _publishEndpoint = publishEndpoint;
+            //_publishEndpoint = publishEndpoint;
         }
 
         public async Task<Response<ReportDto>> CreateAsync(ReportDto reportDto)
@@ -36,7 +37,7 @@ namespace AkilliSayac.Services.Report.Services
             newReport.CreatedTime = DateTime.Now;
             await _reportCollection.InsertOneAsync(newReport);
             //rabbitmq için
-            await _publishEndpoint.Publish<ReportChangedEvent>(new ReportChangedEvent { Status=1 });
+            //await _publishEndpoint.Publish<ReportChangedEvent>(new ReportChangedEvent { ReportStatus = ReportStatus.Completed });
             return Response<ReportDto>.Success(_mapper.Map<ReportDto>(newReport), 200);
         }
 
@@ -48,12 +49,14 @@ namespace AkilliSayac.Services.Report.Services
                 foreach (var report in reports)
                 {
                     report.Counter = await _counterCollection.Find<Models.Counter>(x => x.Id.ToString() == report.CounterId).FirstAsync();
+                   
                 }
             }
             else
             {
               reports=new List<Models.Report>();
             }
+           
             return Response<List<ReportDto>>.Success(_mapper.Map<List<ReportDto>>(reports), 200);
         }
 
@@ -82,6 +85,21 @@ namespace AkilliSayac.Services.Report.Services
             report.Counter = await _counterCollection.Find<Models.Counter>(x => x.Id.ToString() == report.CounterId).FirstAsync();
 
             return Response<ReportDto>.Success(_mapper.Map<ReportDto>(report), 200);
+        }
+
+        public async Task<Response<NoContent>> UpdateAsync(ReportDto reportDto)
+        {
+            var updateReport = _mapper.Map<Models.Report>(reportDto);
+
+            var result = await _reportCollection.FindOneAndReplaceAsync(x => x.Id == reportDto.Id, updateReport);
+
+            if (result == null)
+            {
+                return Response<NoContent>.Fail("Report not found", 404);
+            }
+            
+
+            return Response<NoContent>.Success(204);
         }
     }
 }

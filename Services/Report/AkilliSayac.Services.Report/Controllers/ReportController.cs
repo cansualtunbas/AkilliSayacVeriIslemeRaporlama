@@ -9,11 +9,11 @@ namespace AkilliSayac.Services.Report.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReportsController : CustomBaseController
+    public class ReportController : CustomBaseController
     {
         private readonly IReportService _reportService;
         private readonly ISharedIdentityService _sharedIdentityService;
-        public ReportsController(IReportService reportService, ISharedIdentityService sharedIdentityService)
+        public ReportController(IReportService reportService, ISharedIdentityService sharedIdentityService)
         {
             _reportService= reportService;
             _sharedIdentityService= sharedIdentityService;
