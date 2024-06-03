@@ -16,6 +16,15 @@ namespace AkilliSayac.Web.Services
         {
             _client = client;
         }
+
+        public async Task<bool> CreateReportAsync(ReportViewModel reportCreate)
+        {
+
+            var response = await _client.PostAsJsonAsync<ReportViewModel>("report", reportCreate);
+
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<List<ReportViewModel>> GetAllReportAsync()
         {
             var response = await _client.GetAsync("report");

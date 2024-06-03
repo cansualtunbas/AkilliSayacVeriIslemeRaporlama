@@ -2,8 +2,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-@model List<AkilliSayac.Web.Models.Reports.ReportViewModel>
-
+@model List<AkilliSayac.Web.Models.Counters.CounterViewModel>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="row">
     <div class="col-md-12">
 
@@ -14,47 +14,143 @@
                 @* <a asp-controller="Report" asp-action="Create" class="btn btn-primary mb-3">Sayaç oluştur</a> *@
                 @if (Model.Any())
                 {
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Seri Numarası</th>
-                             
-                                <th>Rapor Durumu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
+                        <table class="table table-striped table-bordered">
+                            <thead>
                                 <tr>
-
-                                    <td>@item.CounterSerialNumber</td>
-                                    
-                                    <td>@item.ReportStatus</td>
-
-
-                                    <td>
-
-                                        @using (Html.BeginForm("CreateReport", "Report"))
-                                        {
-                                            <input type="hidden" name="Id" value="@item.Id" />
-                                            <input class = "btn btn-info"  type="submit" value="Rapor Oluştur" />
-                                        }
-                                    </td>
-
+                                    <th>Seri Numarası</th>
 
                                 </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model)
+                            {
+                                        <tr>
+                                            <input type="hidden" id="id" name="Id" value="@item.Id" />
+                                             <td>@item.SerialNumber</td>
+
+                                            <td>
+                                        @using (Html.BeginForm("CreateReport", "Report"))
+                                        {
+
+                                            @*                           <input type="submit" class="btn btn-info" value="Rapor Oluştur" /> *@
+
+                                                        <input type="button" id="myButton" onclick="CreateReport('@item.SerialNumber.ToString()')" class="btn btn-info" value="Rapor Oluştur" />
+                                        }
+                                            </td>
+
+
+                                        </tr>
                             }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                 }
                 else
                 {
-                    <div class="alert alert-info">
-                        Rapor bulunamadı.
-                    </div>
+                        <div class="alert alert-info">
+                            Rapor bulunamadı.
+                        </div>
                 }
             </div>
         </div>
     </div>
 </div>
 
+<script>
+
+    function CreateReport(serialNumber) {
+
+       
+        $.ajax({
+            type: "POST",
+            url: "/Report/CreateReport?serialNumber=" + serialNumber,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if(data!=null){
+                    if(data.reportStatus==0){
+                        var title="Rapor Hazırlanıyor."
+                        Swal.fire({
+                          title: title,
+                          showConfirmButton: false,
+                          timer: 1500
+                });
+                    }
+                  
+             
+                      // DownloadedReport(data.Id);
+                }
+
+
+
+
+
+            }
+        })
+
+
+
+    }
+
+
+    function DownloadedReport(id) {
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Report/DownloadedReport?Id=" + id,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if (data === 1) {
+
+                    GetCounterList(id)
+
+                }
+
+
+            }
+        })
+    }
+    function GetCounterList(id) {
+
+
+        $.ajax({
+            type: "GET",
+            url: "/Report/GetCounterList?serialNumber=" + serialNumber,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var listData = [];
+                if (data != null) {
+                    data.forEach(x => {
+                        if (x != "") {
+                            var newElement = {};
+                            newElement['CurrentValue'] = x.currentValue;
+                            newElement['LatestIndex'] = x.latestIndex
+                            newElement['MeasurementTime'] = x.measurementTime;
+                            newElement['SerialNumber'] = x.serialNumber;
+                            newElement['VoltageValue'] = x.voltageValue;
+
+                            listData.push(newElement);
+                        }
+                    })
+                    var list = listData;
+                    debugger;
+                    $.ajax({
+                        contentType: 'application/json; charset=utf-8',
+                        url: "/Report/Export",
+                        type: "POST",
+                        data: { 'list': listData },
+                        dataType: "json",
+                        success: function (data) {
+
+                        }
+                    })
+                }
+
+            }
+        })
+    }
+</script>

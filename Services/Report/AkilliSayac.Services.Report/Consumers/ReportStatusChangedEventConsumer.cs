@@ -24,8 +24,6 @@ namespace AkilliSayac.Services.Report.Consumers
             {
                 RequestedDate=result.Data.RequestedDate,
                 CounterSerialNumber=result.Data.CounterSerialNumber,
-                //CounterId=result.Data.CounterId,
-                Counter=result.Data.Counter,
                 CreatedTime=result.Data.CreatedTime,
                 Id = result.Data.Id,
                 //değişecek yer

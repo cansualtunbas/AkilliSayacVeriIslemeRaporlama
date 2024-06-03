@@ -8,5 +8,6 @@ namespace AkilliSayac.Web.Services.Interfaces
         Task<List<ReportViewModel>> GetAllReportAsync();
         Task<ReportViewModel> GetByReportId(string id);
         Task<bool> UpdateReportAsync(ReportViewModel reportCreate);
+        Task<bool> CreateReportAsync(ReportViewModel reportCreate);
     }
 }

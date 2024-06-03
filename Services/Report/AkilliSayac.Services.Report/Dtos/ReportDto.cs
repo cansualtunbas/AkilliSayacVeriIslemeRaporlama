@@ -13,7 +13,7 @@ namespace AkilliSayac.Services.Report.Dtos
         public ReportStatus ReportStatus { get; set; }
         //public string CounterId { get; set; }
         public string CounterSerialNumber { get; set; }
-        public Counter Counter { get; set; }
+        //public Counter Counter { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }

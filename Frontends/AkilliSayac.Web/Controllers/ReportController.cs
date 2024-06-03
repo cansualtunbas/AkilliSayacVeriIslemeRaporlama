@@ -1,16 +1,22 @@
 ﻿using AkilliSayac.Shared.Classes;
+using AkilliSayac.Shared.Enums;
 using AkilliSayac.Shared.Messages;
+using AkilliSayac.Web.Models.Counters;
+using AkilliSayac.Web.Models.Reports;
 using AkilliSayac.Web.Services.Interfaces;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using OfficeOpenXml.Table;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
+using System.Text;
 using static MassTransit.ValidationResultExtensions;
 
 namespace AkilliSayac.Web.Controllers
@@ -31,10 +37,47 @@ namespace AkilliSayac.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _reportService.GetAllReportAsync());
-        }
+            var list = await _counterService.GetAllCounterAsync();
+            List<CounterViewModel> counterViewModels = new List<CounterViewModel>();
+            var a = list.GroupBy(x => x.SerialNumber).Select(x => x.First().SerialNumber).ToList();
 
-        public async Task<IActionResult> CreateReport(string Id)
+            foreach (var item in a)
+            {
+                counterViewModels.Add(list.Where(x => x.SerialNumber == item).First());
+            }
+            return View(counterViewModels);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateReport(string serialNumber)
+        {
+            var guid = Guid.NewGuid();
+            var reportViewModel = new ReportViewModel
+            {
+                Id = guid.ToString(),
+                RequestedDate = DateTime.Now,
+                ReportStatus = 0,
+                CreatedTime = DateTime.Now,
+                CounterSerialNumber = serialNumber,
+                
+               
+
+            };
+
+
+            var result = await _reportService.CreateReportAsync(reportViewModel);
+
+            var report = await _reportService.GetByReportId(guid.ToString());
+
+
+            return Ok(report);
+
+
+
+
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> DownloadedReport(string Id)
         {
             var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{RabbitMQSettingsConst.ReportChangedEventQueueName}"));
             var result = await _reportService.GetByReportId(Id);
@@ -47,63 +90,63 @@ namespace AkilliSayac.Web.Controllers
             };
             await sendEndpoint.Send<ReportChangedEvent>(reportChangedEvent);
 
-            //await Export(Id);
-            return RedirectToAction("Index", "Report");
-        }
+            return Ok(1);
 
-        public async Task<IActionResult> Export(string Id)
+
+
+        }
+        [HttpGet]
+        public async Task<List<CounterViewModel>> GetCounterList(string Id)
         {
             var result = await _reportService.GetByReportId(Id);
             var counterList = await _counterService.GetAllCounterAsync();
 
             counterList.Where(x => x.SerialNumber == result.CounterSerialNumber).OrderByDescending(x => x.MeasurementTime).ToList();
-            //MemoryStream memStream;
-
-            //using (var package = new ExcelPackage())
-            //{
-            //    var worksheet = package.Workbook.Worksheets.Add("New Sheet");
-
-            //    worksheet.Cells[1, 1].Value = "ID";
-            //    worksheet.Cells[1, 2].Value = "Name";
-            //    worksheet.Cells[2, 1].Value = "1";
-            //    worksheet.Cells[2, 2].Value = "One";
-            //    worksheet.Cells[3, 1].Value = "2";
-            //    worksheet.Cells[3, 2].Value = "Two";
-
-            //    memStream = new MemoryStream(package.GetAsByteArray());
-            //}
-            return Ok();
-
+            return counterList;
         }
 
-        public MemoryStream Download()
+
+        [HttpPost]
+        public FileResult Export(List<CounterViewModel> list)
         {
-            MemoryStream memStream;
-            ExcelPackage.LicenseContext  = OfficeOpenXml.LicenseContext.Commercial;
-            using (var package = new ExcelPackage())
+
+            DataTable dt = new DataTable("Grid");
+            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Seri No") });
+            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Ölçüm Zamanı") });
+            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Son Endeks Bilgisi") });
+            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Voltaj Değeri") });
+            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Akım Değeri") });
+
+
+
+            foreach (var customer in list)
             {
-               
-                var worksheet = package.Workbook.Worksheets.Add("New Sheet");
-
-                worksheet.Cells[1, 1].Value = "ID";
-                worksheet.Cells[1, 2].Value = "Name";
-                worksheet.Cells[2, 1].Value = "1";
-                worksheet.Cells[2, 2].Value = "One";
-                worksheet.Cells[3, 1].Value = "2";
-                worksheet.Cells[3, 2].Value = "Two";
-
-                memStream = new MemoryStream(package.GetAsByteArray());
+                dt.Rows.Add(customer.SerialNumber);
+                dt.Rows.Add(customer.MeasurementTime);
+                dt.Rows.Add(customer.LatestIndex);
+                dt.Rows.Add(customer.VoltageValue);
+                dt.Rows.Add(customer.CurrentValue);
             }
 
-            return memStream;
-        }
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Grid.xlsx");
 
-        public FileStreamResult Download2()
-        {
-            var memStream = Download();
-            return File(memStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        }
 
- 
+
+                }
+            }
+
+
+
+
+        }
     }
+
+
+
 }
