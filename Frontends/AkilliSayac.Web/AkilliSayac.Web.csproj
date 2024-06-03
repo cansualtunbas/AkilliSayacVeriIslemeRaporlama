@@ -21,4 +21,13 @@
     <ProjectReference Include="..\..\Shared\AkilliSayac.Shared\AkilliSayac.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\exceljs.min.js" />
+    <None Include="wwwroot\js\FileSaver.js" />
+  </ItemGroup>
+
 </Project>

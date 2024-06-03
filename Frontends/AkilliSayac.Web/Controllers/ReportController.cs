@@ -90,7 +90,7 @@ namespace AkilliSayac.Web.Controllers
             };
             await sendEndpoint.Send<ReportChangedEvent>(reportChangedEvent);
 
-            return Ok(1);
+            return Ok(result.Id);
 
 
 
@@ -101,50 +101,11 @@ namespace AkilliSayac.Web.Controllers
             var result = await _reportService.GetByReportId(Id);
             var counterList = await _counterService.GetAllCounterAsync();
 
-            counterList.Where(x => x.SerialNumber == result.CounterSerialNumber).OrderByDescending(x => x.MeasurementTime).ToList();
+            counterList=counterList.Where(x => x.SerialNumber == result.CounterSerialNumber).OrderByDescending(x => x.MeasurementTime).ToList();
             return counterList;
         }
 
 
-        [HttpPost]
-        public FileResult Export(List<CounterViewModel> list)
-        {
-
-            DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Seri No") });
-            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Ölçüm Zamanı") });
-            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Son Endeks Bilgisi") });
-            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Voltaj Değeri") });
-            dt.Columns.AddRange(new DataColumn[1] { new DataColumn("Akım Değeri") });
-
-
-
-            foreach (var customer in list)
-            {
-                dt.Rows.Add(customer.SerialNumber);
-                dt.Rows.Add(customer.MeasurementTime);
-                dt.Rows.Add(customer.LatestIndex);
-                dt.Rows.Add(customer.VoltageValue);
-                dt.Rows.Add(customer.CurrentValue);
-            }
-
-            using (XLWorkbook wb = new XLWorkbook())
-            {
-                wb.Worksheets.Add(dt);
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    wb.SaveAs(stream);
-                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Grid.xlsx");
-
-
-
-                }
-            }
-
-
-
-
-        }
     }
 
 
