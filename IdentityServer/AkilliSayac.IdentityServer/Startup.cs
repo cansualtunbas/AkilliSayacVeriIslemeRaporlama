@@ -68,9 +68,6 @@ namespace AkilliSayac.IdentityServer
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
                     options.ClientId = "868458569328-c7jl1drksbiku34nm4moh2nkehtsao8b.apps.googleusercontent.com";
                     options.ClientSecret = "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";
                 });
