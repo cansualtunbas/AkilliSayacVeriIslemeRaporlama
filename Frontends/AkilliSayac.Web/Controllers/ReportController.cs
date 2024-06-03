@@ -64,6 +64,7 @@ namespace AkilliSayac.Web.Controllers
             };
 
 
+
             var result = await _reportService.CreateReportAsync(reportViewModel);
 
             var report = await _reportService.GetByReportId(guid.ToString());
