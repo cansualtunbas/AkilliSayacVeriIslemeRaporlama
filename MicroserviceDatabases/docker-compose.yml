@@ -10,4 +10,4 @@ services:
 volumes:
   AkilliSayacDb_volume:
   identitydb_volume:
-  rabbitmq_volume:
+  
