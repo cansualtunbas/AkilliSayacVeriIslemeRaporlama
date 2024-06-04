@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  AkilliSayacDb:
+    container_name: AkilliSayacDb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - AkilliSayacDb_volume:/data/db
+  identitydb:
+    container_name: identitydb
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - identitydb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password12*
+  rabbitmq:
+    container_name: rabbitmqcontainer
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_volume:/var/lib/rabbitmq
+

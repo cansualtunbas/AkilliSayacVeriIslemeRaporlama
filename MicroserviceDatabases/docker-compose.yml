@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  AkilliSayacDb:
+    image: mongo
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+  rabbitmq:
+    image: rabbitmq:3.13.3-management
+ 
+volumes:
+  AkilliSayacDb_volume:
+  identitydb_volume:
+  rabbitmq_volume:
