@@ -1,32 +1,32 @@
 
 
-Proje mikroservis mimarisine uygun olarak hazırlandı.
+Proje mikroservis mimarisine uygun olarak hazÄ±rlandÄ±.
 
 Katmanlar:
- -IdentityServer : identityserver4 OAuth 2.0 (Authorization) ve OpenId Connect (Authentication) protokollerini implement eden bir framework olduğu için üyelik sistemi için kullanıldı. Mikroservisler (Counter-Report) identityserver ile (resourceownerpassword) koruma altına alınarak erişim token'lar ile sağlandı. Identityserver projeye implement edilirken hazır template yapısı ile implement edildi fakat sunulan hazır ön yüz template kullanılmadı sadece endpointlerinin OAuth ve OpenId protokollerine uygun olması sebebiyle tercih edildi. Proje ayağa kalktığında database hazır dummy bir kullanıcı oluşturulması için scope içinde dummy kullanıcı bilgileri eklendi.
-	NOT:Identityserver projesinde diğer versiyonları ücretli olduğu için netcoreapp3.1 kullanıldı.
+ -IdentityServer : identityserver4 OAuth 2.0 (Authorization) ve OpenId Connect (Authentication) protokollerini implement eden bir framework olduÄŸu iÃ§in Ã¼yelik sistemi iÃ§in kullanÄ±ldÄ±. Mikroservisler (Counter-Report) identityserver ile (resourceownerpassword) koruma altÄ±na alÄ±narak eriÅŸim token'lar ile saÄŸlandÄ±. Identityserver projeye implement edilirken hazÄ±r template yapÄ±sÄ± ile implement edildi fakat sunulan hazÄ±r Ã¶n yÃ¼z template kullanÄ±lmadÄ± sadece endpointlerinin OAuth ve OpenId protokollerine uygun olmasÄ± sebebiyle tercih edildi. Proje ayaÄŸa kalktÄ±ÄŸÄ±nda database hazÄ±r dummy bir kullanÄ±cÄ± oluÅŸturulmasÄ± iÃ§in scope iÃ§inde dummy kullanÄ±cÄ± bilgileri eklendi.
+	NOT:Identityserver projesinde diÄŸer versiyonlarÄ± Ã¼cretli olduÄŸu iÃ§in netcoreapp3.1 kullanÄ±ldÄ±.
 
- -Shared : Bu katman tüm projelerde ortak olacak methodların kullanımına uygun olarak hazırlandı. Ayrıca mesaj kuyruk sistemi için kullanılan rabbitmq'nun event ve commandlarının aynı namespace altında olması gerektiğinden Messages klasörü altında bu eventler oluşturuldu.
+ -Shared : Bu katman tÃ¼m projelerde ortak olacak methodlarÄ±n kullanÄ±mÄ±na uygun olarak hazÄ±rlandÄ±. AyrÄ±ca mesaj kuyruk sistemi iÃ§in kullanÄ±lan rabbitmq'nun event ve commandlarÄ±nÄ±n aynÄ± namespace altÄ±nda olmasÄ± gerektiÄŸinden Messages klasÃ¶rÃ¼ altÄ±nda bu eventler oluÅŸturuldu.
 
  -Services :
-	-Counter Servisi: Database olarak Mongo DB kullanılmıştır. Bu api projesinde sayaç ekleme, sayaç güncelleme ve sayaç silme işlemlerinin yapılabileceği ortam hazırlanmıştır. Proje ayağa kalktığında database hazır dummy sayaçlar oluşturulması için scope içinde dummy sayaçlar eklendi.
-	-Report Servisi:  Database olarak Mongo DB kullanılmıştır. Rapor durumundaki değişikliğin sağlanması amacıyla Consumer klasörü oluşturuldu. Bu projede sayaç numaralarına göre sıralama yapılarak rapor çıktısının excel olarak alınması sağlandı. Rapor oluştur dendiğinde rapor tablosuna rapor durumu 0 (hazırlanıyor) olan kayıt oluşturulduktan sonra mesaj kuyruk sistemi ile durumu 1(Tamamlandı) set ediliyor.
+	-Counter Servisi: Database olarak Mongo DB kullanÄ±lmÄ±ÅŸtÄ±r. Bu api projesinde sayaÃ§ ekleme, sayaÃ§ gÃ¼ncelleme ve sayaÃ§ silme iÅŸlemlerinin yapÄ±labileceÄŸi ortam hazÄ±rlanmÄ±ÅŸtÄ±r. Proje ayaÄŸa kalktÄ±ÄŸÄ±nda database hazÄ±r dummy sayaÃ§lar oluÅŸturulmasÄ± iÃ§in scope iÃ§inde dummy sayaÃ§lar eklendi.
+	-Report Servisi:  Database olarak Mongo DB kullanÄ±lmÄ±ÅŸtÄ±r. Rapor durumundaki deÄŸiÅŸikliÄŸin saÄŸlanmasÄ± amacÄ±yla Consumer klasÃ¶rÃ¼ oluÅŸturuldu. Bu projede sayaÃ§ numaralarÄ±na gÃ¶re sÄ±ralama yapÄ±larak rapor Ã§Ä±ktÄ±sÄ±nÄ±n excel olarak alÄ±nmasÄ± saÄŸlandÄ±. Rapor oluÅŸtur dendiÄŸinde rapor tablosuna rapor durumu 0 (hazÄ±rlanÄ±yor) olan kayÄ±t oluÅŸturulduktan sonra mesaj kuyruk sistemi ile durumu 1(TamamlandÄ±) set ediliyor.
 
- -Gateways : Gelen isteklerin mikroservislerin port numarasıyla ilgilenilmeden tek bir port üzerinden haberleşmesi amacıyla bu proje oluşturuldu. Ocelot kütüphanesi kullanıldı ve tabii ki identity server ile koruma altına alındı.
+ -Gateways : Gelen isteklerin mikroservislerin port numarasÄ±yla ilgilenilmeden tek bir port Ã¼zerinden haberleÅŸmesi amacÄ±yla bu proje oluÅŸturuldu. Ocelot kÃ¼tÃ¼phanesi kullanÄ±ldÄ± ve tabii ki identity server ile koruma altÄ±na alÄ±ndÄ±.
 
-  -Web : Web projesi mvc olarak hazırlandı ve sayfalar için boostrapt template kullanıldı.
+  -Web : Web projesi mvc olarak hazÄ±rlandÄ± ve sayfalar iÃ§in boostrapt template kullanÄ±ldÄ±.
 
 
-  Projede yer alan tüm databaseler dockerize edildi ve proje ayağa kaldırılmadan önce aşağıda bahsedilen şekilde docker dosyalarının ayağa kaldırılması gerekmektedir.
+  Projede yer alan tÃ¼m databaseler dockerize edildi ve proje ayaÄŸa kaldÄ±rÄ±lmadan Ã¶nce aÅŸaÄŸÄ±da bahsedilen ÅŸekilde docker dosyalarÄ±nÄ±n ayaÄŸa kaldÄ±rÄ±lmasÄ± gerekmektedir.
 
-  Adım 1: proje klasörü içinde MicroserviceDatabases adındaki klasörünün uzantısına powershell içinde gittikten sonra 
-  (örn:
+  AdÄ±m 1: proje klasÃ¶rÃ¼ iÃ§inde MicroserviceDatabases adÄ±ndaki klasÃ¶rÃ¼nÃ¼n uzantÄ±sÄ±na powershell iÃ§inde gittikten sonra 
+  (Ã¶rn:
   cd C:\Users\Cansu\source\Repos\AkilliSayac\AkilliSayacVeriIslemeRaporlama\MicroserviceDatabases)
 
   docker-compose up
 
-  komutunu çalıştırmanız gerekmektedir. Eğer docker desktop kurulu ise rabbitmqcontainer,identitydb,AkilliSayacDb container'larını görebilirsiniz. Container'lar ayağa kalktıktan sonra localinizde  Shared projesi hariç diğer tüm projeleri multiple seçmeniz ve çalıştırmanız gerekmektedir. Ardından tarayıcınızdan http://localhost:5010/ adresine gidebilirsiniz. Tüm port bilgileri Port.txt dosyasında yer almaktadır.
+  komutunu Ã§alÄ±ÅŸtÄ±rmanÄ±z gerekmektedir. EÄŸer docker desktop kurulu ise rabbitmqcontainer,identitydb,AkilliSayacDb container'larÄ±nÄ± gÃ¶rebilirsiniz. Container'lar ayaÄŸa kalktÄ±ktan sonra localinizde  Shared projesi hariÃ§ diÄŸer tÃ¼m projeleri multiple seÃ§meniz ve Ã§alÄ±ÅŸtÄ±rmanÄ±z gerekmektedir. ArdÄ±ndan tarayÄ±cÄ±nÄ±zdan http://localhost:5010/ adresine gidebilirsiniz. TÃ¼m port bilgileri Port.txt dosyasÄ±nda yer almaktadÄ±r.
 
-  Teşekkürler,
+  TeÅŸekkÃ¼rler,
 
-  Cansu altunbaş
+  Cansu
