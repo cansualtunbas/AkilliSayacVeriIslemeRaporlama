@@ -20,8 +20,6 @@ Katmanlar:
   Projede yer alan tüm databaseler dockerize edildi ve proje ayağa kaldırılmadan önce aşağıda bahsedilen şekilde docker dosyalarının ayağa kaldırılması gerekmektedir.
 
   Adım 1: proje klasörü içinde MicroserviceDatabases adındaki klasörünün uzantısına powershell içinde gittikten sonra 
-  (örn:
-  cd C:\Users\Cansu\source\Repos\AkilliSayac\AkilliSayacVeriIslemeRaporlama\MicroserviceDatabases)
 
   docker-compose up
 
