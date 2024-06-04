@@ -20,19 +20,20 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FA10E4BD-8FE3-447D-A120-18EF7D4113B6}"
 	ProjectSection(SolutionItems) = preProject
 		Port.txt = Port.txt
+		README.txt = README.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Counter", "Counter", "{AC6621D4-7E52-42D6-A827-A63A90548C0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkilliSayac.Services.Counter", "Services\Counter\AkilliSayac.Services.Counter\AkilliSayac.Services.Counter.csproj", "{A4C63E75-9EC8-451E-82E8-581D0E527A5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkilliSayac.Services.Counter", "Services\Counter\AkilliSayac.Services.Counter\AkilliSayac.Services.Counter.csproj", "{A4C63E75-9EC8-451E-82E8-581D0E527A5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{84461715-7A2C-49DB-B995-DC964544FDD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkilliSayac.Gateway", "AkilliSayac.Gateway\AkilliSayac.Gateway.csproj", "{C8F50FED-3BBB-4CDE-9987-215577D25269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkilliSayac.Gateway", "AkilliSayac.Gateway\AkilliSayac.Gateway.csproj", "{C8F50FED-3BBB-4CDE-9987-215577D25269}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontends", "Frontends", "{82DA3A44-8E1D-41B1-85ED-C7532BA5BDE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkilliSayac.Web", "Frontends\AkilliSayac.Web\AkilliSayac.Web.csproj", "{85E350D0-6E3A-4CFD-9371-4C8D0846D08D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkilliSayac.Web", "Frontends\AkilliSayac.Web\AkilliSayac.Web.csproj", "{85E350D0-6E3A-4CFD-9371-4C8D0846D08D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
